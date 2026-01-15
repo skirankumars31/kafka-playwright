@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { KafkaJS } from '@confluentinc/kafka-javascript';
-import { Admin, Producer, stringSerializers, jsonSerializer} from '@platformatic/kafka'
+import {Admin, Producer, Consumer, stringSerializers, jsonSerializer, stringDeserializers} from '@platformatic/kafka'
 
 const bootstrapServer = 'localhost:9092';
 
@@ -91,5 +91,31 @@ test('platformatic - create topic and send message', async ({ page }) => {
   });
 
   await producer.close();
+
+  // Create a consumer with string deserialisers
+  const consumer = new Consumer({
+    groupId: 'my-consumer-group',
+    clientId: 'my-consumer',
+    bootstrapBrokers: [bootstrapServer],
+    deserializers: stringDeserializers
+  })
+
+  // Create a consumer stream
+  const stream = await consumer.consume({
+    autocommit: false,
+    mode: "latest",
+    topics: ["test-topic"],
+    sessionTimeout: 10000,
+    heartbeatInterval: 500
+  })
+
+  // Option 2: Async iterator consumption
+  for await (const message of stream) {
+    console.log(`Received: ${message.key} -> ${message.value}`)
+    await stream.close()
+  }
+
+  // Close the consumer when done
+  await consumer.close()
 
 });
