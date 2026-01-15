@@ -1,0 +1,12 @@
+{
+  "name": "kafka-testcontainer",
+  "scripts": {},
+  "devDependencies": {
+    "@playwright/test": "1.57.0",
+    "@testcontainers/kafka": "11.7.1",
+    "@types/node": "^25.0.8"
+  },
+  "dependencies": {
+    "@confluentinc/kafka-javascript": "1.8.0"
+  }
+}

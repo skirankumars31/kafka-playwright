@@ -1,0 +1,9 @@
+services:
+
+  Kafka:
+    image: apache/kafka:4.1.1
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    env_file:
+      - kafka.env
