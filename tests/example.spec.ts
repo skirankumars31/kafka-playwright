@@ -103,11 +103,12 @@ test('platformatic - create topic and send message', async ({ page }) => {
   // Create a consumer stream
   const stream = await consumer.consume({
     autocommit: false,
-    mode: "latest",
+    mode: "earliest",
     topics: ["test-topic"],
     sessionTimeout: 10000,
     heartbeatInterval: 500
   })
+
 
   // Option 2: Async iterator consumption
   for await (const message of stream) {
